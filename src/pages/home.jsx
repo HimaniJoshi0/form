@@ -1,9 +1,17 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-const home = () => {
+
+const Home = () => {
+
   return (
-    <div>home</div>
+    <>
+    <div>
+      <h1>HOME PAGE</h1>
+      <button><Link to="/">LOG-IN</Link></button>
+      </div>
+    </>
   )
 }
 
-export default home
+export default Home

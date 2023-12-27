@@ -1,121 +1,108 @@
-import React from 'react'
+import React from 'react';
 import "./form.css"
-import { Link } from 'react-router-dom'
-import { useFormik} from 'formik'
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signUpSchema } from '../schema';
 
 
-const initialValues={
-  name:"",
-  email:"",
-  password:""
-};
+const MyForm = (props) => {
 
+  const navigate = useNavigate(); 
+  const initialValues = {
+    name: '',
+    email: '',
+    password: '',
+  };
+  
 
-const Form = (props) => {
+  const check=()=>{
+    if(props.submit === "Sign-in"){
+    const userData = JSON.parse(localStorage.getItem("formValues"));
+     Object.keys(userData).forEach((keys)=>{
+        if(keys.values===initialValues.values){
+          navigate('/home')
+        }
+       
+     })
+    }
+ 
+ }
 
-   const {values, errors, touched, handleBlur, handleChange, handleSubmit} = useFormik({    
-    initialValues: initialValues,
-    validationSchema:signUpSchema,
-
-    onSubmit:(values)=>{                       /*callback function */
-    localStorage.setItem('formValues', JSON.stringify(values));
-      console.log("hello")
-      console.log(values ) 
-    },
-   });
-
-   console.log(values )
-
-   
 
   return (
-    <>
-    <div className='wrapper'>
-     <div className='container'>
+    <div className='container'>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={signUpSchema}
+        onSubmit={(values) => {
+          localStorage.setItem('formValues', JSON.stringify(values));
+          console.log(values);
+        }}
+      >
+        <Form>
+          <div>
+            <div >
+              <div >
+                <h1>{props.title}</h1>
+              </div>
 
-        <div className='heading'>
-            <h1>{props.title}</h1>
-        </div>
+              <div className='form_details'>
+                <div>
+                  <label htmlFor='name'>NAME</label>
+                  <div className='inputs'>
+                    <Field
+                      type='text'
+                      id='name'
+                      placeholder='NAME'
+                      name='name'
+                    />
+                    <ErrorMessage name='name' component='p' className='errors' />
+                  </div>
+                </div>
 
-        <div className='form_details'>
+                <div>
+                  <label htmlFor='email'>EMAIL</label>
+                  <div className='inputs'>
+                    <Field
+                      type='email'
+                      id='email'
+                      placeholder='E-MAIL'
+                      name='email'
+                    />
+                    <ErrorMessage name='email' component='p' className='errors' />
+                  </div>
+                </div>
 
-          <form  onSubmit={handleSubmit}>
-
-            <div>
-            <label htmlFor='name'>NAME</label>
-            <div className='inputs'>
-            <input 
-            type="name"
-             autoComplete='off'
-              id='name'
-             placeholder='NAME' 
-             name='name' 
-             value={values.name} 
-             onChange={handleChange} 
-             onBlur={handleBlur}
-             />
-             {errors.name && touched.name ?(
-             <p className='errors'>{errors.name}</p>
-             ): null}
-             </div>
-          
+                <div>
+                  <label htmlFor='password'>PASSWORD</label>
+                  <div className='inputs'>
+                    <Field
+                      type='password'
+                      id='password'
+                      placeholder='PASSWORD'
+                      name='password'
+                    />
+                    <ErrorMessage
+                      name='password'
+                      component='p'
+                      className='errors'
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className='submit'>
+                <button type='submit' onClick={check}>{props.submit}</button>
+                <p>
+                  <Link to={props.link}>{props.change}</Link>
+                </p>
+              </div>
             </div>
-
-            <div>
-            <label htmlFor='email'>EMAIL</label>
-            <div className='inputs'>
-            <input 
-            type="email" 
-            autoComplete='off' 
-            id='email' 
-            placeholder='E-MAIL' 
-            name='email' 
-            value={values.email}
-            onChange={handleChange} 
-             onBlur={handleBlur}
-             />
-            {errors.email && touched.email ?(
-             <p className='errors'>{errors.email}</p>
-             ): null}
-            </div>
-           
-            </div>
-
-            <div>
-            <label htmlFor='password'>PASSWORD</label>
-            <div className='inputs'>
-            <input 
-            type="password" 
-            autoComplete='off' 
-            id='password' 
-            placeholder='PASSWORD'
-             name='password'
-             value={values.password}
-             onChange={handleChange} 
-             onBlur={handleBlur}
-             />  
-            {errors.password && touched.password ?(
-             <p className='errors'>{errors.password}</p>
-             ): null}
-            </div>
-             
-
-            </div>  
-            
-          </form>
-        </div> 
-
-       <div className='submit'>
-        <button type='submit'>SUBMIT</button>
-        <p> <Link to={props.link}>{props.change}</Link></p>
-       </div>
-
-
-     </div>
+          </div>
+        </Form>
+      </Formik>
     </div>
-    </>
-  )
-}
+  );
+};
 
-export default Form
+export default MyForm;
