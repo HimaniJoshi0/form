@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "../components/form.css"
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { signUpSchema } from '../schema';
 
-const Login = (props) => {
+const Login = () => {
 
   const navigate = useNavigate(); 
   const initialValues = {
@@ -36,7 +36,9 @@ const Login = (props) => {
       }
   
   }
+   
  
+
  
 
 
@@ -47,9 +49,13 @@ const Login = (props) => {
         initialValues={initialValues}
         validationSchema={signUpSchema}
         onSubmit={(values) => {
+          console.log("hello")
           check(values);
+          
         }}
       >
+
+{({  isValidate }) => (
         <Form>
           <div>
             <div >
@@ -66,6 +72,7 @@ const Login = (props) => {
                       id='name'
                       placeholder='NAME'
                       name='name'
+              
                     />
                     <ErrorMessage name='name' component='p' className='errors' />
                   </div>
@@ -79,6 +86,7 @@ const Login = (props) => {
                       id='email'
                       placeholder='E-MAIL'
                       name='email'
+                      
                     />
                     <ErrorMessage name='email' component='p' className='errors' />
                   </div>
@@ -92,6 +100,7 @@ const Login = (props) => {
                       id='password'
                       placeholder='PASSWORD'
                       name='password'
+                     
                     />
                     <ErrorMessage
                       name='password'
@@ -103,7 +112,13 @@ const Login = (props) => {
               </div>
       
               <div className='submit'>
-                <button type='submit'>Sign-In</button>
+                <div>
+                <button type='submit' className={isValidate ? '' : 'submit_btn'}>
+                        Sign-In
+                </button>
+                <p>forget password</p>
+                </div>
+                
                 <p>
                   <Link to="/register">Register User</Link>
                 </p>
@@ -111,6 +126,7 @@ const Login = (props) => {
             </div>
           </div>
         </Form>
+     )}
       </Formik>
     </div>
     </>

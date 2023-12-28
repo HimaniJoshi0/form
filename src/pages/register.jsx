@@ -12,6 +12,9 @@ const Register = (props) => {
     name: '',
     email: '',
     password: '',
+    confirm_password:'',
+    gender:'',
+    check_box: false
   };
   
 
@@ -22,13 +25,20 @@ const Register = (props) => {
         initialValues={initialValues}
         validationSchema={signUpSchema}
         onSubmit={(values) => {
-          const existingFormValues = JSON.parse(localStorage.getItem('formValues')) || [];
-          const existingFormValuesArray = Object.values(existingFormValues);
-
-         const updatedFormValues = [...existingFormValuesArray, values];
+          signUpSchema.validate(values)
+          .then(()=>{
+            const existingFormValues = JSON.parse(localStorage.getItem('formValues')) || [];
+            const existingFormValuesArray = Object.values(existingFormValues);
   
-          localStorage.setItem('formValues', JSON.stringify(updatedFormValues));
-          console.log(values);
+           const updatedFormValues = [...existingFormValuesArray, values];
+    
+            localStorage.setItem('formValues', JSON.stringify(updatedFormValues));
+            console.log(values);
+          })
+          .catch(errors => { 
+            console.error(errors);
+          });
+         
         }}
       >
         <Form>
@@ -66,6 +76,32 @@ const Register = (props) => {
                 </div>
 
                 <div>
+                  <label htmlFor='gender'>GENDER:</label>
+                  <div className='inputs'>
+                  <label>
+                    <Field
+                      type='radio'
+                      name='gender'
+                      value='male'
+                      as="input"
+                    />
+                     MALE
+                    </label>
+                   
+                    <label>
+                    <Field
+                      type='radio'
+                      name='gender'
+                      value='female'
+                      as="input"
+                    />
+                    FEMALE
+                    </label>
+                    <ErrorMessage name='gender' component='p' className='errors' />
+                  </div>
+                </div>
+
+                <div>
                   <label htmlFor='password'>PASSWORD</label>
                   <div className='inputs'>
                     <Field
@@ -81,6 +117,40 @@ const Register = (props) => {
                     />
                   </div>
                 </div>
+
+                <div>
+                  <label htmlFor='confirm_password'>CONFIRM PASSWORD</label>
+                  <div className='inputs'>
+                    <Field
+                      type='password'
+                      id='confirm_password'
+                      placeholder='PASSWORD'
+                      name='confirm_password'
+                    />
+                    <ErrorMessage
+                      name='confirm_password'
+                      component='p'
+                      className='errors'
+                    />
+                  </div>
+                </div>
+
+                <div>
+                <Field
+                      type='checkbox'
+                      id='check_box'
+                      name='check_box'
+                      
+                    />    
+                  <label htmlFor='check_box'>Agree terms and conditions</label>
+                  <ErrorMessage
+                      name='check_box'
+                      component='p'
+                      className='errors'
+                    />   
+                </div>
+
+
               </div>
               <div className='submit'>
                 <button type='submit'>Sign-Up</button>
